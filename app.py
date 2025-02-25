@@ -2,19 +2,29 @@ import streamlit as st
 import yt_dlp
 import whisper
 import os
+import subprocess
+
+def install_ffmpeg():
+    try:
+        subprocess.run(["ffmpeg", "-version"], check=True)
+    except FileNotFoundError:
+        print("Installing ffmpeg...")
+        os.system("apt-get update && apt-get install -y ffmpeg")
 
 def download_audio(youtube_url, output_filename="audio.mp3"):
     """Downloads audio from a YouTube video using yt-dlp and ensures correct filename."""
     ydl_opts = {
-        "format": "bestaudio/best",
-        "outtmpl": output_filename[:-4],
-        "postprocessors": [{
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "192"
-        }],
-        "quiet": True
+    "format": "bestaudio/best",
+    "outtmpl": "audio",
+    "postprocessors": [{
+        "key": "FFmpegExtractAudio",
+        "preferredcodec": "mp3",
+        "preferredquality": "192"
+    }],
+    "ffmpeg_location": "/usr/bin/ffmpeg",  # Update path if needed
+    "quiet": True,
     }
+
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([youtube_url])
@@ -51,4 +61,5 @@ def main():
             st.warning("Please enter a valid YouTube URL.")
 
 if __name__ == "__main__":
+    install_ffmpeg()
     main()
