@@ -12,27 +12,31 @@ def install_ffmpeg():
         os.system("apt-get update && apt-get install -y ffmpeg")
 
 def download_audio(youtube_url, output_filename="audio.mp3"):
-    """Downloads audio from a YouTube video using yt-dlp and ensures correct filename."""
+    """Downloads audio from a YouTube video using yt-dlp."""
     ydl_opts = {
-    "format": "bestaudio/best",
-    "outtmpl": "audio",
-    "postprocessors": [{
-        "key": "FFmpegExtractAudio",
-        "preferredcodec": "mp3",
-        "preferredquality": "192"
-    }],
-    "ffmpeg_location": "/usr/bin/ffmpeg",  # Update path if needed
-    "quiet": True,
+        "format": "bestaudio/best",
+        "outtmpl": output_filename[:-4],  # Avoid double .mp3 extension
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192"
+        }],
+        "quiet": True,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     }
 
-    
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([youtube_url])
-    
+        try:
+            ydl.download([youtube_url])
+        except yt_dlp.utils.DownloadError as e:
+            print(f"Error: {e}")
+            return None
+
     if not os.path.exists(output_filename) and os.path.exists(output_filename + ".mp3"):
         os.rename(output_filename + ".mp3", output_filename)
-    
+
     return output_filename
+
 
 def transcribe_audio(audio_path):
     """Transcribes audio using Whisper."""
