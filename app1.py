@@ -8,6 +8,7 @@ import time
 from typing import Optional
 import re
 import streamlit as st
+import subprocess
 
 def install_ffmpeg():
     try:
