@@ -40,8 +40,7 @@ def print_status(message: str, done: bool = False):
         sys.stdout.flush()
 
 def download_audio(youtube_url: str, output_path: str) -> Optional[str]:
-    """Downloads audio from YouTube with progress feedback."""
-    ensure_event_loop() 
+    """Downloads audio from YouTube with progress feedback.""" 
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': output_path[:-4],
