@@ -9,6 +9,13 @@ from typing import Optional
 import re
 import streamlit as st
 import subprocess
+import asyncio
+def ensure_event_loop():
+    """Ensures an event loop exists for async functions like yt-dlp."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
 
 def install_ffmpeg():
     try:
@@ -33,6 +40,7 @@ def print_status(message: str, done: bool = False):
 
 def download_audio(youtube_url: str, output_path: str) -> Optional[str]:
     """Downloads audio from YouTube with progress feedback."""
+    ensure_event_loop() 
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': output_path[:-4],
