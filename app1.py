@@ -1,3 +1,10 @@
+"""Ensures an event loop exists for async functions like yt-dlp."""
+import asyncio
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
 import yt_dlp
 import whisper
 import os
@@ -9,13 +16,7 @@ from typing import Optional
 import re
 import streamlit as st
 import subprocess
-import asyncio
-def ensure_event_loop():
-    """Ensures an event loop exists for async functions like yt-dlp."""
-    try:
-        asyncio.get_running_loop()
-    except RuntimeError:
-        asyncio.set_event_loop(asyncio.new_event_loop())
+
 
 def install_ffmpeg():
     try:
