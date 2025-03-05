@@ -34,6 +34,7 @@ def download_audio(youtube_url: str, output_path: str) -> Optional[str]:
             'preferredquality': '192',
         }],
         'quiet': True,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         'noplaylist': True,
         'retries': 3,
         'fragment_retries': 3,
