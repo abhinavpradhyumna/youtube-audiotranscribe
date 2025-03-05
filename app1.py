@@ -9,6 +9,13 @@ from typing import Optional
 import re
 import streamlit as st
 
+def install_ffmpeg():
+    try:
+        subprocess.run(["ffmpeg", "-version"], check=True)
+    except FileNotFoundError:
+        print("Installing ffmpeg...")
+        os.system("apt-get update && apt-get install -y ffmpeg")
+
 def clear_line():
     """Clears the current line in the terminal."""
     sys.stdout.write('\r' + ' ' * 80 + '\r')
@@ -153,4 +160,5 @@ def main():
                 )
 
 if __name__ == "__main__":
+    install_ffmpeg()
     main()
